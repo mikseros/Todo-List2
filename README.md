@@ -1,3 +1,6 @@
 ## Todo List2
 
-Simple application created for learning purposes.
+Simple full-stack application created for learning purposes.
+
+- Laravel
+- Vue.js
