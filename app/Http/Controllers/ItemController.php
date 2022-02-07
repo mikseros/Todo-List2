@@ -84,7 +84,7 @@ class ItemController extends Controller
             return $existingItem;
         }
         
-        return "Item not found.";
+        return response(["message" => "Item not found."], 404);
     }
 
     /**
@@ -99,9 +99,9 @@ class ItemController extends Controller
 
         if ($existingItem) {
             $existingItem->delete();
-            return "Item successfully deleted.";
+            return response(["message" => "Item successfully deleted."], 200);
         }
 
-        return "Item not found.";
+        return response(["message" => "Item not found"], 404);
     }
 }
