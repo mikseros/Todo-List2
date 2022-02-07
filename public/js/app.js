@@ -15376,7 +15376,9 @@ __webpack_require__.r(__webpack_exports__);
         item: this.item
       }).then(function (response) {
         if (response.status == 201) {
-          _this.item.name == "";
+          _this.item.name = "";
+
+          _this.$emit('reloadlist');
         }
       })["catch"](function (error) {
         console.log(error);
@@ -15400,6 +15402,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _addItemForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addItemForm */ "./resources/js/components/addItemForm.vue");
 /* harmony import */ var _listView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./listView */ "./resources/js/components/listView.vue");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15466,7 +15473,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['item']
+  props: ['item'],
+  methods: {
+    updateCheck: function updateCheck() {
+      var _this = this;
+
+      axios.put('api/item/' + this.item.id, {
+        item: this.item
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this.$emit('itemChanged');
+        }
+      })["catch"](function (error) {
+        concole.log('error');
+      });
+    },
+    removeItem: function removeItem() {
+      var _this2 = this;
+
+      axios["delete"]('api/item/' + this.item.id).then(function (response) {
+        if (response.status == 200) {
+          _this2.$emit('itemchanged');
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -15483,6 +15516,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _listItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./listItem */ "./resources/js/components/listItem.vue");
+//
 //
 //
 //
@@ -39039,12 +39073,25 @@ var render = function () {
         [
           _c("h2", { attrs: { id: "title" } }, [_vm._v("Todo List")]),
           _vm._v(" "),
-          _c("add-item-form"),
+          _c("add-item-form", {
+            on: {
+              reloadlist: function ($event) {
+                return _vm.getList()
+              },
+            },
+          }),
         ],
         1
       ),
       _vm._v(" "),
-      _c("list-view", { attrs: { items: _vm.items } }),
+      _c("list-view", {
+        attrs: { items: _vm.items },
+        on: {
+          reloadlist: function ($event) {
+            return _vm.getList()
+          },
+        },
+      }),
     ],
     1
   )
@@ -39166,7 +39213,17 @@ var render = function () {
       return _c(
         "div",
         { key: index },
-        [_c("list-item", { staticClass: "item", attrs: { item: item } })],
+        [
+          _c("list-item", {
+            staticClass: "item",
+            attrs: { item: item },
+            on: {
+              itemchanged: function ($event) {
+                return _vm.$emit("reloadlist")
+              },
+            },
+          }),
+        ],
         1
       )
     }),
